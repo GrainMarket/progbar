@@ -1,7 +1,7 @@
 // +build linux darwin freebsd netbsd openbsd solaris dragonfly
 // +build !appengine
 
-package termutil
+package termutils
 
 import (
 	"fmt"

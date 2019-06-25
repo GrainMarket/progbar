@@ -1,18 +1,18 @@
-package pb
+package progbar
 
 import (
 	"fmt"
 	"math"
 	"time"
 
-	"gopkg.in/VividCortex/ewma.v1"
+	"github.com/VividCortex/ewma"
 )
 
 var speedAddLimit = time.Second / 2
 
 type speed struct {
 	ewma                  ewma.MovingAverage
-	lastStateId           uint64
+	lastStateID           uint64
 	prevValue, startValue int64
 	prevTime, startTime   time.Time
 }
@@ -21,11 +21,11 @@ func (s *speed) value(state *State) float64 {
 	if s.ewma == nil {
 		s.ewma = ewma.NewMovingAverage()
 	}
-	if state.IsFirst() || state.Id() < s.lastStateId {
+	if state.IsFirst() || state.ID() < s.lastStateID {
 		s.reset(state)
 		return 0
 	}
-	if state.Id() == s.lastStateId {
+	if state.ID() == s.lastStateID {
 		return s.ewma.Value()
 	}
 	if state.IsFinished() {
@@ -39,13 +39,13 @@ func (s *speed) value(state *State) float64 {
 	lastSpeed := diff / dur.Seconds()
 	s.prevTime = state.Time()
 	s.prevValue = state.Value()
-	s.lastStateId = state.Id()
+	s.lastStateID = state.ID()
 	s.ewma.Add(lastSpeed)
 	return s.ewma.Value()
 }
 
 func (s *speed) reset(state *State) {
-	s.lastStateId = state.Id()
+	s.lastStateID = state.ID()
 	s.startTime = state.Time()
 	s.prevTime = state.Time()
 	s.startValue = state.Value()

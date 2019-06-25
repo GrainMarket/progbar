@@ -1,7 +1,7 @@
-package pb
+package progbar
 
 import (
-	"gopkg.in/fatih/color.v1"
+	"github.com/fatih/color"
 	"testing"
 )
 

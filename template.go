@@ -1,11 +1,11 @@
-package pb
+package progbar
 
 import (
 	"math/rand"
 	"sync"
 	"text/template"
 
-	"gopkg.in/fatih/color.v1"
+	"github.com/fatih/color"
 )
 
 // ProgressBarTemplate that template string

@@ -1,6 +1,6 @@
 // +build windows
 
-package termutil
+package termutils
 
 import (
 	"fmt"

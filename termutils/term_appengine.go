@@ -1,6 +1,6 @@
 // +build appengine
 
-package termutil
+package termutils
 
 import "errors"
 

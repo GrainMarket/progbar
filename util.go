@@ -1,9 +1,9 @@
-package pb
+package progbar
 
 import (
 	"bytes"
 	"fmt"
-	"gopkg.in/mattn/go-runewidth.v0"
+	"github.com/mattn/go-runewidth"
 	"math"
 	"regexp"
 	//"unicode/utf8"
@@ -18,6 +18,7 @@ const (
 
 var ctrlFinder = regexp.MustCompile("\x1b\x5b[0-9]+\x6d")
 
+// CellCount returns the number of runes in a string, regardless of what encoding it is in.
 func CellCount(s string) int {
 	n := runewidth.StringWidth(s)
 	for _, sm := range ctrlFinder.FindAllString(s, -1) {
@@ -26,6 +27,7 @@ func CellCount(s string) int {
 	return n
 }
 
+// StripString strips the string and returns it
 func StripString(s string, w int) string {
 	l := CellCount(s)
 	if l <= w {
@@ -36,6 +38,7 @@ func StripString(s string, w int) string {
 	return buf.String()
 }
 
+// StripStringToBuffer strips the string and writes it the buffer
 func StripStringToBuffer(s string, w int, buf *bytes.Buffer) {
 	var seqs = ctrlFinder.FindAllStringIndex(s, -1)
 mainloop:

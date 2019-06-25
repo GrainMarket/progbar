@@ -1,4 +1,4 @@
-package termutil
+package termutils
 
 import (
 	"errors"

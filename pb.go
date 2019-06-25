@@ -1,4 +1,4 @@
-package pb
+package progbar
 
 import (
 	"bytes"
@@ -12,9 +12,9 @@ import (
 	"text/template"
 	"time"
 
-	"gopkg.in/cheggaaa/pb.v2/termutil"
-	"gopkg.in/mattn/go-colorable.v0"
-	"gopkg.in/mattn/go-isatty.v0"
+	"github.com/TheBrazenGeek/progbar/termutils"
+	"github.com/mattn/go-colorable"
+	"github.com/mattn/go-isatty"
 )
 
 // Version of ProgressBar library
@@ -68,7 +68,7 @@ func Start64(total int64) *ProgressBar {
 }
 
 var (
-	terminalWidth    = termutil.TerminalWidth
+	terminalWidth    = termutils.TerminalWidth
 	isTerminal       = isatty.IsTerminal
 	isCygwinTerminal = isatty.IsCygwinTerminal
 )
@@ -231,7 +231,7 @@ func (pb *ProgressBar) Current() int64 {
 	return atomic.LoadInt64(&pb.current)
 }
 
-// Add adding given int64 value to bar value
+// Add64 adding given int64 value to bar value
 func (pb *ProgressBar) Add64(value int64) *ProgressBar {
 	atomic.AddInt64(&pb.current, value)
 	return pb
@@ -306,6 +306,7 @@ func (pb *ProgressBar) Width() (width int) {
 	return
 }
 
+// SetRefreshRate sets the frequency the bar refreshes itself.
 func (pb *ProgressBar) SetRefreshRate(dur time.Duration) *ProgressBar {
 	pb.mu.Lock()
 	if dur > 0 {
@@ -368,7 +369,7 @@ func (pb *ProgressBar) IsStarted() bool {
 	return pb.finish != nil
 }
 
-// SetTemplateString sets ProgressBar tempate string and parse it
+// SetTemplateString sets ProgressBar template string and parse it
 func (pb *ProgressBar) SetTemplateString(tmpl string) *ProgressBar {
 	pb.mu.Lock()
 	defer pb.mu.Unlock()
@@ -376,7 +377,7 @@ func (pb *ProgressBar) SetTemplateString(tmpl string) *ProgressBar {
 	return pb
 }
 
-// SetTemplateString sets ProgressBarTempate and parse it
+// SetTemplate sets ProgressBarTemplate and parses it
 func (pb *ProgressBar) SetTemplate(tmpl ProgressBarTemplate) *ProgressBar {
 	return pb.SetTemplateString(string(tmpl))
 }
@@ -491,11 +492,11 @@ type State struct {
 	recalc []Element
 }
 
-// Id it's the current state identifier
+// ID it's the current state identifier
 // - incremental
 // - starts with 1
 // - resets after finish/start
-func (s *State) Id() uint64 {
+func (s *State) ID() uint64 {
 	return s.id
 }
 
