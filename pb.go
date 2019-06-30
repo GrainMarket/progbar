@@ -31,7 +31,7 @@ const (
 	// Also we're will try to use terminal width
 	Terminal
 
-	// Static means progress bar will not update automaticly
+	// Static means progress bar will not update automatically
 	Static
 
 	// ReturnSymbol - by default in terminal mode it's '\r'
@@ -96,24 +96,9 @@ type ProgressBar struct {
 	err            error
 }
 
-func (pb *ProgressBar) configure() {
-	if pb.configured {
-		return
-	}
-	pb.configured = true
-
+func (pb *ProgressBar) defaultVars() {
 	if pb.vars == nil {
 		pb.vars = make(map[interface{}]interface{})
-	}
-	if pb.output == nil {
-		pb.output = os.Stderr
-	}
-
-	if pb.tmpl == nil {
-		pb.tmpl, pb.err = getTemplate(string(Default))
-		if pb.err != nil {
-			return
-		}
 	}
 	if pb.vars[Terminal] == nil {
 		if f, ok := pb.output.(*os.File); ok {
@@ -132,8 +117,11 @@ func (pb *ProgressBar) configure() {
 			pb.vars[Color] = true
 		}
 	}
-	if pb.refreshRate == 0 {
-		pb.refreshRate = defaultRefreshRate
+}
+
+func (pb *ProgressBar) defaultOutput() {
+	if pb.output == nil {
+		pb.output = os.Stderr
 	}
 	if f, ok := pb.output.(*os.File); ok {
 		pb.coutput = colorable.NewColorable(f)
@@ -141,6 +129,29 @@ func (pb *ProgressBar) configure() {
 		pb.coutput = pb.output
 	}
 	pb.nocoutput = colorable.NewNonColorable(pb.output)
+}
+
+func (pb *ProgressBar) configure() {
+	if !pb.configured {
+		pb.configured = true
+
+		pb.defaultVars()
+		pb.defaultOutput()
+
+
+		if pb.tmpl == nil {
+			pb.tmpl, pb.err = getTemplate(string(Default))
+			if pb.err != nil {
+				return
+			}
+		}
+
+		if pb.refreshRate == 0 {
+			pb.refreshRate = defaultRefreshRate
+		}
+
+	}
+	return
 }
 
 // Start starts the bar

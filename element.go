@@ -219,9 +219,11 @@ var ElementBar ElementFunc = func(state *State, args ...string) string {
 	} else if curCount > 0 {
 		widthLeft -= p.write(state, 2, curCount)
 	}
+
 	if widthLeft > 0 {
-		widthLeft -= p.write(state, 3, widthLeft)
+		p.write(state, 3, widthLeft)
 	}
+
 	// write right border
 	p.write(state, 4, p.cc[4])
 	// cut result and return string
