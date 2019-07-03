@@ -150,14 +150,11 @@ func (pb *ProgressBar) configure() {
 	if !pb.configured {
 		pb.configured = true
 
-		pb.defaultVars()
 		pb.defaultOutput()
+		pb.defaultVars()
 
 		if pb.tmpl == nil {
-			pb.tmpl, pb.err = getTemplate(string(Default))
-			if pb.err != nil {
-				return
-			}
+			pb.tmpl, _ = getTemplate(string(Default))
 		}
 
 		if pb.refreshRate == 0 {

@@ -1,9 +1,11 @@
 package progbar
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -216,4 +218,37 @@ func BenchmarkRender(b *testing.B) {
 			}
 		})
 	}
+}
+
+func TestProgressElement(t *testing.T) {
+	expected := []string{"0 / 100 [______________________________________________________________________________] 0.00% ? p/s", "0 / 100  0"}
+	bar1 := Start64(100)
+	state1 := testState(100, 50, 10, false, false)
+	bar1.ProgressElement(state1, "Test", "100")
+	result1 := fmt.Sprintf("%s", bar1.Start())
+	if result1 != expected[0] {
+		t.Errorf("Unexpected result: (actual/expected)\n'%s'\n'%s'", result1, expected[0])
+	}
+
+	bar2 := StartNew(100)
+	if bar1 == bar2 {
+		t.Errorf("Unexpected match: the compared values should be different\n'%s'\n'%s'", "StartNew()", "Start64()")
+	}
+	state2 := testState(100, 50, 10, true, true)
+	bar2.ProgressElement(state2, "Test", "100")
+	result2 := fmt.Sprintf("%s", bar2.Start())
+	if result2 != expected[1] {
+		t.Errorf("Unexpected result: (actual/expected)\n'%s'\n'%s'", result2, expected[1])
+	}
+
+	brokenTemplate := `{{string . "prefix"}}{{counters . }} {{bar . }} {{percent . }} {{speed . }}{{string . "suffix"}`
+	bar3 := new(ProgressBar)
+	bar3.SetWriter(bufio.NewWriter(os.Stdout))
+	bar3.SetTemplateString(brokenTemplate)
+	bar3.configure()
+	bar3.write(true)
+	if bar3.Err() == nil {
+		t.Errorf("Writing a broken template should result in an error: \n`%s`\n'%v'", brokenTemplate, bar3.Err())
+	}
+
 }

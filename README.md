@@ -1,6 +1,6 @@
 # Terminal progress bar for Go
 
-[![Coverage Status](https://coveralls.io/repos/github/TheBrazenGeek/progbar/badge.svg)](https://coveralls.io/github/TheBrazenGeek/progbar) [![Go Report Card](https://goreportcard.com/badge/github.com/TheBrazenGeek/progbar)](https://goreportcard.com/report/github.com/TheBrazenGeek/progbar)
+[![codecov](https://codecov.io/gh/TheBrazenGeek/progbar/branch/master/graph/badge.svg)](https://codecov.io/gh/TheBrazenGeek/progbar) [![Go Report Card](https://goreportcard.com/badge/github.com/TheBrazenGeek/progbar)](https://goreportcard.com/report/github.com/TheBrazenGeek/progbar)
 
 ## What the fork!?
 
