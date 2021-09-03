@@ -1,4 +1,4 @@
-module github.com/TheBrazenGeek/progbar
+module github.com/grainmarket/progbar
 
 go 1.12
 
